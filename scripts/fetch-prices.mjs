@@ -126,13 +126,13 @@ async function debugQuery(label, params) {
 }
 
 async function runDebugQueries() {
-  await debugQuery("control: nonsense term", new URLSearchParams({ product_name__like: "xyzNichtExistiert123", size: "5" }));
-  await debugQuery("product__product_name__like=Mehl", new URLSearchParams({ product__product_name__like: "Mehl", size: "5" }));
-  await debugQuery("product__product_name__ilike=Mehl", new URLSearchParams({ product__product_name__ilike: "Mehl", size: "5" }));
-  await debugQuery("product_name__ilike=Mehl", new URLSearchParams({ product_name__ilike: "Mehl", size: "5" }));
-  await debugQuery("product__product_name=Mehl exact", new URLSearchParams({ product__product_name: "Mehl", size: "5" }));
-  await debugQuery("search=Mehl", new URLSearchParams({ search: "Mehl", size: "5" }));
   await debugQuery("no filter baseline", new URLSearchParams({ size: "5" }));
+  await debugQuery("category_tag=en:flours", new URLSearchParams({ category_tag: "en:flours", size: "5" }));
+  await debugQuery("category_tag=flours", new URLSearchParams({ category_tag: "flours", size: "5" }));
+  await debugQuery("category_tag=en:flours + DE", new URLSearchParams({ category_tag: "en:flours", location_country_code: "DE", size: "5" }));
+  await debugQuery("categories_tags=en:flours", new URLSearchParams({ categories_tags: "en:flours", size: "5" }));
+  await debugQuery("category_tag=en:sugars", new URLSearchParams({ category_tag: "en:sugars", size: "5" }));
+  await debugQuery("category_tag=xyz-nonsense", new URLSearchParams({ category_tag: "xyz-nonsense-category", size: "5" }));
 }
 
 async function main() {
