@@ -171,8 +171,8 @@ async function handleUpdatePrices() {
   statusEl.textContent = t("ingredients.updating");
 
   try {
-    const { okCount, total, cache } = await updateAllPrices((ingredient, result) => {
-      renderPriceCell(ingredient, cache[ingredient.id] || result);
+    const { okCount, total } = await updateAllPrices((ingredient, entry) => {
+      renderPriceCell(ingredient, entry);
       updateRowCost(ingredient.id);
       updateTotal();
     });
@@ -190,6 +190,7 @@ async function handleUpdatePrices() {
       statusEl.textContent = `❌ ${t("ingredients.status.fail")} (0/${total})`;
     }
   } catch (err) {
+    console.error("Preise aktualisieren fehlgeschlagen:", err);
     statusEl.className = "update-status status-fail";
     statusEl.textContent = `❌ ${t("ingredients.status.fail")}`;
   } finally {
