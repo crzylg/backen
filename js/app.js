@@ -25,7 +25,7 @@ function renderIngredientsTable() {
   const tbody = document.getElementById("ingredients-tbody");
   tbody.innerHTML = "";
 
-  INGREDIENTS.forEach((ingredient) => {
+  getAllIngredients().forEach((ingredient) => {
     const tr = document.createElement("tr");
     tr.dataset.id = ingredient.id;
 
@@ -90,13 +90,16 @@ function renderPriceCell(ingredient, entry) {
     } else if (entry.source === "default") {
       badge.className = "badge badge-default";
       badge.textContent = t("ingredients.defaultSource");
+    } else if (entry.source === "live") {
+      badge.className = "badge badge-live";
+      badge.textContent = t("ingredients.liveSource");
     } else {
       badge.className = "badge badge-ok";
       badge.textContent = t("ingredients.offSource");
     }
     sourceTd.appendChild(badge);
 
-    if (entry.source === "off" && entry.sampleCount) {
+    if ((entry.source === "off" || entry.source === "live") && entry.sampleCount) {
       const small = document.createElement("small");
       small.className = "sample-count";
       small.textContent = ` (${entry.sampleCount} ${t("ingredients.samples")})`;
@@ -113,12 +116,73 @@ function renderPriceCell(ingredient, entry) {
     priceTd.classList.add("not-found");
   }
 
+  if (ingredient.custom) {
+    const badgeCustom = document.createElement("span");
+    badgeCustom.className = "badge badge-custom";
+    badgeCustom.textContent = t("ingredients.customBadge");
+    sourceTd.appendChild(badgeCustom);
+
+    const searchBtn = document.createElement("button");
+    searchBtn.type = "button";
+    searchBtn.className = "manual-link";
+    searchBtn.textContent = t("ingredients.searchPrice");
+    searchBtn.addEventListener("click", () => handleSearchPrice(ingredient, searchBtn));
+    sourceTd.appendChild(searchBtn);
+  }
+
   const manualBtn = document.createElement("button");
   manualBtn.type = "button";
   manualBtn.className = "manual-link";
   manualBtn.textContent = t("ingredients.enterManually");
   manualBtn.addEventListener("click", () => promptManualPrice(ingredient));
   sourceTd.appendChild(manualBtn);
+
+  if (ingredient.custom) {
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "manual-link manual-link-delete";
+    deleteBtn.textContent = t("ingredients.deleteIngredient");
+    deleteBtn.addEventListener("click", () => {
+      deleteCustomIngredient(ingredient.id);
+      delete quantities[ingredient.id];
+      renderIngredientsTable();
+    });
+    sourceTd.appendChild(deleteBtn);
+  }
+}
+
+async function handleSearchPrice(ingredient, buttonEl) {
+  const statusEl = document.getElementById("update-status");
+  const proxy = getProxyUrl();
+  if (!proxy) {
+    statusEl.className = "update-status status-fail";
+    statusEl.textContent = `❌ ${t("ingredients.noProxyConfigured")}`;
+    return;
+  }
+
+  const originalText = buttonEl.textContent;
+  buttonEl.disabled = true;
+  buttonEl.textContent = t("ingredients.searching");
+
+  const result = await liveSearchPrice(ingredient);
+
+  if (result.status === "ok" && typeof result.pricePerUnit === "number") {
+    const cache = setLivePrice(ingredient.id, result.pricePerUnit, result.sampleCount);
+    renderPriceCell(ingredient, cache[ingredient.id]);
+    updateRowCost(ingredient.id);
+    updateTotal();
+    statusEl.className = "update-status status-ok";
+    statusEl.textContent = `✅ ${ingredientName(ingredient)}: ${t("ingredients.liveSource")}`;
+  } else if (result.status === "not_found") {
+    statusEl.className = "update-status status-partial";
+    statusEl.textContent = `⚠️ ${ingredientName(ingredient)}: ${t("ingredients.liveNotFound")}`;
+  } else {
+    statusEl.className = "update-status status-fail";
+    statusEl.textContent = `❌ ${ingredientName(ingredient)}: ${t("ingredients.liveError")}`;
+  }
+
+  buttonEl.disabled = false;
+  buttonEl.textContent = originalText;
 }
 
 function promptManualPrice(ingredient) {
@@ -139,7 +203,6 @@ function promptManualPrice(ingredient) {
 }
 
 function updateRowCost(ingredientId) {
-  const ingredient = INGREDIENTS.find((i) => i.id === ingredientId);
   const cache = loadPriceCache();
   const entry = cache[ingredientId];
   const costTd = document.getElementById(`cost-cell-${ingredientId}`);
@@ -154,7 +217,7 @@ function updateRowCost(ingredientId) {
 function updateTotal() {
   const cache = loadPriceCache();
   let total = 0;
-  INGREDIENTS.forEach((ingredient) => {
+  getAllIngredients().forEach((ingredient) => {
     const entry = cache[ingredient.id];
     const qty = quantities[ingredient.id] || 0;
     if (entry && entry.status === "ok" && typeof entry.pricePerUnit === "number") {
@@ -324,9 +387,54 @@ function refreshUiTexts() {
   document.querySelectorAll(".lang-btn").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.lang === getLang());
   });
+  populateUnitSelect();
   renderIngredientsTable();
   renderLastUpdated();
   renderRecipeList();
+}
+
+// ---- Neue Zutat hinzufügen ----
+function populateUnitSelect() {
+  const select = document.getElementById("new-ingredient-unit");
+  const current = select.value;
+  select.innerHTML = "";
+  ["g", "ml", "piece"].forEach((unit) => {
+    const option = document.createElement("option");
+    option.value = unit;
+    option.textContent = unitLabel(unit);
+    select.appendChild(option);
+  });
+  if (current) select.value = current;
+}
+
+function wireAddIngredientForm() {
+  const form = document.getElementById("add-ingredient-form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nameInput = document.getElementById("new-ingredient-name");
+    const unitSelect = document.getElementById("new-ingredient-unit");
+    const name = nameInput.value.trim();
+    if (!name) return;
+
+    addCustomIngredient(name, unitSelect.value);
+    nameInput.value = "";
+    renderIngredientsTable();
+  });
+}
+
+// ---- Einstellungen: Proxy-URL für die Live-Suche ----
+function wireProxySettings() {
+  const input = document.getElementById("proxy-url-input");
+  const saveBtn = document.getElementById("save-proxy-btn");
+  const statusEl = document.getElementById("proxy-status");
+
+  input.value = getProxyUrl();
+  saveBtn.addEventListener("click", () => {
+    setProxyUrl(input.value);
+    input.value = getProxyUrl();
+    statusEl.className = "update-status status-ok";
+    statusEl.textContent = `✅ ${t("settings.saved")}`;
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -337,9 +445,12 @@ document.addEventListener("DOMContentLoaded", () => {
   wireTabs();
   wireLangSwitch();
   wireRecipeForm();
+  wireAddIngredientForm();
+  wireProxySettings();
   document.getElementById("update-prices-btn").addEventListener("click", handleUpdatePrices);
 
   ensureDefaultPrices();
+  populateUnitSelect();
   renderIngredientsTable();
   renderLastUpdated();
   renderRecipeList();

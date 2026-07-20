@@ -131,3 +131,25 @@ function setManualPrice(ingredientId, pricePerUnit) {
   savePriceCache(cache);
   return cache;
 }
+
+// Ergebnis einer Live-Suche (liveSearch.js) für eine selbst hinzugefügte
+// Zutat im Cache ablegen. Wie "off", aber eigene Quelle fürs Badge.
+function setLivePrice(ingredientId, pricePerUnit, sampleCount) {
+  const cache = loadPriceCache();
+  cache[ingredientId] = {
+    status: "ok",
+    pricePerUnit,
+    sampleCount,
+    source: "live",
+    fetchedAt: new Date().toISOString()
+  };
+  savePriceCache(cache);
+  return cache;
+}
+
+function setNotFound(ingredientId) {
+  const cache = loadPriceCache();
+  cache[ingredientId] = { status: "not_found", source: "live", fetchedAt: new Date().toISOString() };
+  savePriceCache(cache);
+  return cache;
+}

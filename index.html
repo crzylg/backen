@@ -36,6 +36,24 @@
       </div>
       <div id="update-status" class="update-status" role="status" aria-live="polite"></div>
 
+      <form id="add-ingredient-form" class="add-ingredient-form">
+        <input type="text" id="new-ingredient-name" data-i18n-placeholder="ingredients.newNamePlaceholder" />
+        <select id="new-ingredient-unit"></select>
+        <button type="submit" class="secondary-btn" data-i18n="ingredients.addButton">+ Zutat hinzufügen</button>
+      </form>
+
+      <details class="settings-box">
+        <summary data-i18n="settings.title">Einstellungen: Live-Preissuche für eigene Zutaten</summary>
+        <p class="settings-help" data-i18n="settings.proxyHelp">
+          Optional: Proxy-URL eintragen, damit "Preis suchen" bei selbst hinzugefügten Zutaten funktioniert.
+        </p>
+        <div class="settings-row">
+          <input type="text" id="proxy-url-input" data-i18n-placeholder="settings.proxyPlaceholder" />
+          <button type="button" id="save-proxy-btn" class="secondary-btn" data-i18n="settings.save">Speichern</button>
+        </div>
+        <div id="proxy-status" class="update-status"></div>
+      </details>
+
       <div class="table-wrap">
         <table id="ingredients-table">
           <thead>
@@ -90,7 +108,9 @@
 
   <script src="js/i18n.js"></script>
   <script src="js/ingredients.js"></script>
+  <script src="js/customIngredients.js"></script>
   <script src="js/priceApi.js"></script>
+  <script src="js/liveSearch.js"></script>
   <script src="js/recipes.js"></script>
   <script src="js/app.js"></script>
 </body>
