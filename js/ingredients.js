@@ -16,7 +16,25 @@ const INGREDIENTS = [
   { id: "cream_cheese", name: { de: "Frischkäse", uk: "Вершковий сир" }, baseUnit: "g", searchTerm: "Frischkäse", offCategory: "cream-cheeses" },
   { id: "powdered_sugar", name: { de: "Puderzucker", uk: "Цукрова пудра" }, baseUnit: "g", searchTerm: "Puderzucker", offCategory: "icing-sugars" },
   { id: "oil", name: { de: "Pflanzenöl", uk: "Олія" }, baseUnit: "ml", searchTerm: "Sonnenblumenöl", offCategory: "vegetable-oils" },
-  { id: "lemon", name: { de: "Zitrone", uk: "Лимон" }, baseUnit: "piece", searchTerm: "Zitrone", offCategory: "lemons" }
+  { id: "lemon", name: { de: "Zitrone", uk: "Лимон" }, baseUnit: "piece", searchTerm: "Zitrone", offCategory: "lemons" },
+  { id: "couverture", name: { de: "Kuvertüre", uk: "Кувертюр (шоколадна глазур)" }, baseUnit: "g", searchTerm: "Kuvertüre", offCategory: "chocolates" },
+  { id: "gelatine", name: { de: "Gelatine (Blatt)", uk: "Желатин (листовий)" }, baseUnit: "piece", searchTerm: "Blattgelatine", offCategory: "gelling-agents" },
+  { id: "cream_stiffener", name: { de: "Sahnesteif", uk: "Стабілізатор для вершків" }, baseUnit: "g", searchTerm: "Sahnesteif", offCategory: "whipped-cream-stabilisers" },
+  { id: "fresh_yeast", name: { de: "Frischhefe", uk: "Свіжі дріжджі" }, baseUnit: "g", searchTerm: "Frischhefe", offCategory: "yeasts" },
+  { id: "dry_yeast", name: { de: "Trockenhefe", uk: "Суха дріжджі" }, baseUnit: "g", searchTerm: "Trockenhefe", offCategory: "yeasts" },
+  { id: "baking_soda", name: { de: "Natron", uk: "Харчова сода" }, baseUnit: "g", searchTerm: "Natron", offCategory: "raising-agents" },
+  { id: "cinnamon", name: { de: "Zimt (gemahlen)", uk: "Кориця (мелена)" }, baseUnit: "g", searchTerm: "Zimt gemahlen", offCategory: "spices" },
+  { id: "vanilla_extract", name: { de: "Vanilleextrakt", uk: "Ванільний екстракт" }, baseUnit: "ml", searchTerm: "Vanilleextrakt", offCategory: "flavourings" },
+  { id: "ground_almonds", name: { de: "Mandeln (gemahlen)", uk: "Мигдаль (мелений)" }, baseUnit: "g", searchTerm: "Mandeln gemahlen", offCategory: "almond-flours" },
+  { id: "honey", name: { de: "Honig", uk: "Мед" }, baseUnit: "g", searchTerm: "Honig", offCategory: "honeys" },
+  { id: "raisins", name: { de: "Rosinen", uk: "Родзинки" }, baseUnit: "g", searchTerm: "Rosinen", offCategory: "raisins" },
+  { id: "coconut_flakes", name: { de: "Kokosraspeln", uk: "Кокосова стружка" }, baseUnit: "g", searchTerm: "Kokosraspeln", offCategory: "shredded-coconuts" },
+  { id: "cornstarch", name: { de: "Speisestärke", uk: "Кукурудзяний крохмаль" }, baseUnit: "g", searchTerm: "Speisestärke", offCategory: "corn-starches" },
+  { id: "buttermilk", name: { de: "Buttermilch", uk: "Маслянка" }, baseUnit: "ml", searchTerm: "Buttermilch", offCategory: "buttermilks" },
+  { id: "yogurt", name: { de: "Naturjoghurt", uk: "Натуральний йогурт" }, baseUnit: "g", searchTerm: "Naturjoghurt", offCategory: "yogurts" },
+  { id: "quark", name: { de: "Quark", uk: "Кварк (кисломолочний сир)" }, baseUnit: "g", searchTerm: "Speisequark", offCategory: "quarks" },
+  { id: "mascarpone", name: { de: "Mascarpone", uk: "Маскарпоне" }, baseUnit: "g", searchTerm: "Mascarpone", offCategory: "mascarpones" },
+  { id: "marzipan", name: { de: "Marzipan (Rohmasse)", uk: "Марципан (сира маса)" }, baseUnit: "g", searchTerm: "Marzipan Rohmasse", offCategory: "marzipans" }
 ];
 
 const UNIT_LABEL = {
@@ -27,4 +45,10 @@ const UNIT_LABEL = {
 function unitLabel(baseUnit) {
   const lang = getLang();
   return (UNIT_LABEL[lang] && UNIT_LABEL[lang][baseUnit]) || baseUnit;
+}
+
+// Erlaubt das Wiederverwenden dieser Liste im Node-Skript (scripts/fetch-prices.mjs),
+// ohne die Browser-Nutzung als globales <script> zu verändern.
+if (typeof module !== "undefined") {
+  module.exports = { INGREDIENTS };
 }

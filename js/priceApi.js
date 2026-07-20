@@ -1,7 +1,11 @@
-// Anbindung an Open Food Facts – Open Prices API (https://prices.openfoodfacts.org)
-// Liefert ausschließlich reale, von der Community gemeldete Preise aus Deutschland.
-// Wird nichts gefunden, wird NIEMALS ein Preis erfunden — Status bleibt "not_found".
-const OFF_PRICES_ENDPOINT = "https://prices.openfoodfacts.org/api/v1/prices";
+// Liest die zuletzt synchronisierten Deutschland-Preise aus data/prices.json.
+// Diese Datei wird NICHT im Browser live von Open Food Facts abgerufen (die
+// Open Prices API unterstützt kein CORS für Browser-Anfragen), sondern von
+// einem GitHub-Actions-Workflow serverseitig aktualisiert (scripts/fetch-prices.mjs,
+// .github/workflows/update-prices.yml), der täglich läuft und bei Bedarf manuell
+// angestoßen werden kann. So bleibt alles kostenlos und ohne eigenen Server.
+// Wird für eine Zutat nichts gefunden, wird NIEMALS ein Preis erfunden.
+const PRICES_JSON_URL = "data/prices.json";
 const PRICE_CACHE_KEY = "pastaci_prices_v1";
 const LAST_UPDATED_KEY = "pastaci_prices_last_updated";
 const FETCH_TIMEOUT_MS = 10000;
@@ -26,114 +30,71 @@ function setLastUpdatedTimestamp(ts) {
   localStorage.setItem(LAST_UPDATED_KEY, ts);
 }
 
-function toBaseGramsOrMl(qty, unit, baseUnit) {
-  const gramUnits = { g: 1, kg: 1000, mg: 0.001 };
-  const mlUnits = { ml: 1, l: 1000, cl: 10 };
-  if (baseUnit === "g" && gramUnits[unit] != null) return qty * gramUnits[unit];
-  if (baseUnit === "ml" && mlUnits[unit] != null) return qty * mlUnits[unit];
-  return null;
-}
-
-// Normalisiert einen einzelnen gemeldeten Preis auf den Preis je Basis-Einheit
-// (g, ml oder Stück). Gibt null zurück, wenn sich kein verlässlicher Wert ableiten lässt.
-function normalizePricePerBaseUnit(item, baseUnit) {
-  const price = typeof item.price === "number" ? item.price : parseFloat(item.price);
-  if (!price || price <= 0) return null;
-  if (item.currency && item.currency !== "EUR") return null;
-
-  const pricePer = item.price_per || (item.product && item.product.price_per) || null;
-  const product = item.product || {};
-  const qty = product.product_quantity ? parseFloat(product.product_quantity) : null;
-  const qtyUnit = product.product_quantity_unit ? String(product.product_quantity_unit).toLowerCase() : null;
-
-  if (baseUnit === "piece") {
-    if (pricePer === "UNIT") return price;
-    if (qty && qtyUnit === "pieces" && qty > 0) return price / qty;
-    return null;
-  }
-
-  if (qty && qtyUnit) {
-    const converted = toBaseGramsOrMl(qty, qtyUnit, baseUnit);
-    if (converted) return price / converted;
-  }
-  if (pricePer === "KILOGRAM" && baseUnit === "g") return price / 1000;
-  if (pricePer === "LITER" && baseUnit === "ml") return price / 1000;
-  return null;
-}
-
-function median(numbers) {
-  const sorted = [...numbers].sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-}
-
-async function fetchIngredientPrice(ingredient) {
+async function fetchSyncedPrices() {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
-    const params = new URLSearchParams({
-      product_name: ingredient.searchTerm,
-      location_country_code: "DE",
-      order_by: "-created",
-      size: "30"
-    });
-    const res = await fetch(`${OFF_PRICES_ENDPOINT}?${params.toString()}`, {
+    const res = await fetch(`${PRICES_JSON_URL}?v=${Date.now()}`, {
       headers: { Accept: "application/json" },
       signal: controller.signal
     });
     clearTimeout(timeout);
-    if (!res.ok) {
-      return { status: "error", httpStatus: res.status };
-    }
-    const data = await res.json();
-    const items = data.items || data.results || [];
-    if (!Array.isArray(items) || items.length === 0) {
-      return { status: "not_found" };
-    }
-    const normalized = items
-      .map((item) => normalizePricePerBaseUnit(item, ingredient.baseUnit))
-      .filter((v) => v !== null && v > 0);
-    if (normalized.length === 0) {
-      return { status: "not_found" };
-    }
-    return { status: "ok", pricePerUnit: median(normalized), sampleCount: normalized.length };
+    if (!res.ok) return null;
+    return await res.json();
   } catch (err) {
     clearTimeout(timeout);
-    return { status: "error", message: err && err.message };
+    return null;
   }
 }
 
-// Ruft für alle Zutaten die aktuellen Preise ab. Manuell eingegebene Preise
-// werden nicht überschrieben, außer die API liefert einen neuen echten Fund.
+// Übernimmt die zuletzt synchronisierten Preise in den lokalen Cache. Manuell
+// eingegebene Preise werden nicht überschrieben. Gibt an, wie viele Zutaten
+// einen echten Preis aus Deutschland haben (okCount) und ob data/prices.json
+// überhaupt erreichbar war (fetchFailed).
 async function updateAllPrices(onProgress) {
   const cache = loadPriceCache();
+  const remote = await fetchSyncedPrices();
   let okCount = 0;
+
   for (const ingredient of INGREDIENTS) {
-    const result = await fetchIngredientPrice(ingredient);
-    if (result.status === "ok") {
-      cache[ingredient.id] = {
+    const remoteEntry = remote && remote.prices ? remote.prices[ingredient.id] : null;
+    let entry;
+    if (remoteEntry && remoteEntry.status === "ok" && typeof remoteEntry.pricePerUnit === "number") {
+      entry = {
         status: "ok",
-        pricePerUnit: result.pricePerUnit,
-        sampleCount: result.sampleCount,
+        pricePerUnit: remoteEntry.pricePerUnit,
+        sampleCount: remoteEntry.sampleCount,
         source: "off",
-        fetchedAt: new Date().toISOString()
+        fetchedAt: (remote && remote.generatedAt) || new Date().toISOString()
       };
+      cache[ingredient.id] = entry;
       okCount++;
     } else {
       const existing = cache[ingredient.id];
-      if (!existing || existing.source !== "manual") {
-        cache[ingredient.id] = {
-          status: result.status,
+      if (existing && existing.source === "manual") {
+        entry = existing;
+      } else {
+        entry = {
+          status: remoteEntry ? remoteEntry.status : "error",
           source: "off",
           fetchedAt: new Date().toISOString()
         };
+        cache[ingredient.id] = entry;
       }
     }
-    if (onProgress) onProgress(ingredient, result);
+    if (onProgress) onProgress(ingredient, entry);
   }
+
   savePriceCache(cache);
-  setLastUpdatedTimestamp(new Date().toISOString());
-  return { okCount, total: INGREDIENTS.length, cache };
+  const ts = (remote && remote.generatedAt) || new Date().toISOString();
+  setLastUpdatedTimestamp(ts);
+  return {
+    okCount,
+    total: INGREDIENTS.length,
+    cache,
+    remoteGeneratedAt: remote ? remote.generatedAt : null,
+    fetchFailed: !remote
+  };
 }
 
 function setManualPrice(ingredientId, pricePerUnit) {
