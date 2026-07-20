@@ -1,174 +1,112 @@
 {
-  "generatedAt": "2026-07-20T10:54:59.992Z",
+  "generatedAt": "2026-07-20T10:57:01.218Z",
   "country": "DE",
   "source": "Open Food Facts - Open Prices (https://prices.openfoodfacts.org)",
-  "okCount": 33,
+  "okCount": 2,
   "total": 33,
   "prices": {
     "flour": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "sugar": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "butter": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "eggs": {
       "status": "ok",
-      "pricePerUnit": 1.4,
-      "sampleCount": 1
+      "pricePerUnit": 0.495,
+      "sampleCount": 4
     },
     "milk": {
-      "status": "ok",
-      "pricePerUnit": 0.00177,
-      "sampleCount": 5
+      "status": "not_found"
     },
     "baking_powder": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "vanilla_sugar": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "salt": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "cocoa": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "chocolate": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "cream": {
-      "status": "ok",
-      "pricePerUnit": 0.00177,
-      "sampleCount": 5
+      "status": "not_found"
     },
     "cream_cheese": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "powdered_sugar": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "oil": {
-      "status": "ok",
-      "pricePerUnit": 0.00177,
-      "sampleCount": 5
+      "status": "not_found"
     },
     "lemon": {
       "status": "ok",
-      "pricePerUnit": 1.4,
-      "sampleCount": 1
+      "pricePerUnit": 0.99,
+      "sampleCount": 5
     },
     "couverture": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "gelatine": {
-      "status": "ok",
-      "pricePerUnit": 1.4,
-      "sampleCount": 1
+      "status": "not_found"
     },
     "cream_stiffener": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "fresh_yeast": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "dry_yeast": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "baking_soda": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "cinnamon": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "vanilla_extract": {
-      "status": "ok",
-      "pricePerUnit": 0.00177,
-      "sampleCount": 5
+      "status": "not_found"
     },
     "ground_almonds": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "honey": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "raisins": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "coconut_flakes": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "cornstarch": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "buttermilk": {
-      "status": "ok",
-      "pricePerUnit": 0.00177,
-      "sampleCount": 5
+      "status": "not_found"
     },
     "yogurt": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "quark": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "mascarpone": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     },
     "marzipan": {
-      "status": "ok",
-      "pricePerUnit": 0.006,
-      "sampleCount": 11
+      "status": "not_found"
     }
   }
 }
