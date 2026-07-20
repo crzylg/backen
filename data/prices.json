@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-07-20T10:45:37.902Z",
+  "country": "DE",
+  "source": "Open Food Facts - Open Prices (https://prices.openfoodfacts.org)",
+  "okCount": 1,
+  "total": 33,
+  "prices": {
+    "flour": {
+      "status": "not_found"
+    },
+    "sugar": {
+      "status": "not_found"
+    },
+    "butter": {
+      "status": "not_found"
+    },
+    "eggs": {
+      "status": "not_found"
+    },
+    "milk": {
+      "status": "not_found"
+    },
+    "baking_powder": {
+      "status": "not_found"
+    },
+    "vanilla_sugar": {
+      "status": "not_found"
+    },
+    "salt": {
+      "status": "not_found"
+    },
+    "cocoa": {
+      "status": "not_found"
+    },
+    "chocolate": {
+      "status": "not_found"
+    },
+    "cream": {
+      "status": "not_found"
+    },
+    "cream_cheese": {
+      "status": "not_found"
+    },
+    "powdered_sugar": {
+      "status": "not_found"
+    },
+    "oil": {
+      "status": "ok",
+      "pricePerUnit": 0.00135,
+      "sampleCount": 1
+    },
+    "lemon": {
+      "status": "not_found"
+    },
+    "couverture": {
+      "status": "not_found"
+    },
+    "gelatine": {
+      "status": "not_found"
+    },
+    "cream_stiffener": {
+      "status": "not_found"
+    },
+    "fresh_yeast": {
+      "status": "not_found"
+    },
+    "dry_yeast": {
+      "status": "not_found"
+    },
+    "baking_soda": {
+      "status": "not_found"
+    },
+    "cinnamon": {
+      "status": "not_found"
+    },
+    "vanilla_extract": {
+      "status": "not_found"
+    },
+    "ground_almonds": {
+      "status": "not_found"
+    },
+    "honey": {
+      "status": "not_found"
+    },
+    "raisins": {
+      "status": "not_found"
+    },
+    "coconut_flakes": {
+      "status": "not_found"
+    },
+    "cornstarch": {
+      "status": "not_found"
+    },
+    "buttermilk": {
+      "status": "not_found"
+    },
+    "yogurt": {
+      "status": "not_found"
+    },
+    "quark": {
+      "status": "not_found"
+    },
+    "mascarpone": {
+      "status": "not_found"
+    },
+    "marzipan": {
+      "status": "not_found"
+    }
+  }
+}
