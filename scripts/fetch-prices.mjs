@@ -100,7 +100,44 @@ async function fetchIngredientPrice(ingredient) {
   }
 }
 
+async function debugQuery(label, params) {
+  try {
+    const res = await fetch(`${OFF_PRICES_ENDPOINT}?${params.toString()}`, {
+      headers: { Accept: "application/json", "User-Agent": "Konditor-Rechner/1.0 (debug)" }
+    });
+    const text = await res.text();
+    let count = "?";
+    let sample = null;
+    try {
+      const json = JSON.parse(text);
+      const items = json.items || json.results || [];
+      count = Array.isArray(items) ? items.length : `total=${json.total ?? "?"}`;
+      sample = items[0] || null;
+    } catch (e) {
+      count = `parse-error: ${text.slice(0, 200)}`;
+    }
+    console.log(`[DEBUG] ${label} -> HTTP ${res.status}, items=${JSON.stringify(count)}`);
+    if (sample) console.log(`[DEBUG]   sample: ${JSON.stringify(sample).slice(0, 500)}`);
+  } catch (err) {
+    console.log(`[DEBUG] ${label} -> ERROR ${err && err.message}`);
+  }
+}
+
+async function runDebugQueries() {
+  await debugQuery("no filters, size=3", new URLSearchParams({ size: "3" }));
+  await debugQuery("location_country_code=DE, size=5", new URLSearchParams({ location_country_code: "DE", size: "5" }));
+  await debugQuery("product_name=Mehl, size=5", new URLSearchParams({ product_name: "Mehl", size: "5" }));
+  await debugQuery("product_name=Mehl + DE", new URLSearchParams({ product_name: "Mehl", location_country_code: "DE", size: "5" }));
+  await debugQuery("product_name__like=Mehl + DE", new URLSearchParams({ product_name__like: "Mehl", location_country_code: "DE", size: "5" }));
+  await debugQuery("countries=Germany, size=5", new URLSearchParams({ countries: "Germany", size: "5" }));
+  await debugQuery("q=Mehl, size=5", new URLSearchParams({ q: "Mehl", size: "5" }));
+}
+
 async function main() {
+  if (process.env.DEBUG_PRICES === "1") {
+    await runDebugQueries();
+    return;
+  }
   const prices = {};
   let okCount = 0;
 
