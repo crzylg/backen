@@ -30,6 +30,27 @@ function setLastUpdatedTimestamp(ts) {
   localStorage.setItem(LAST_UPDATED_KEY, ts);
 }
 
+// Füllt Zutaten ohne jeglichen gespeicherten Preis mit dem recherchierten
+// Richtwert (ingredients.js: defaultPricePerUnit). Wird nur einmalig beim
+// ersten Laden aufgerufen; überschreibt nie einen bereits vorhandenen Eintrag.
+function ensureDefaultPrices() {
+  const cache = loadPriceCache();
+  let changed = false;
+  INGREDIENTS.forEach((ingredient) => {
+    if (!cache[ingredient.id] && typeof ingredient.defaultPricePerUnit === "number") {
+      cache[ingredient.id] = {
+        status: "ok",
+        pricePerUnit: ingredient.defaultPricePerUnit,
+        source: "default",
+        fetchedAt: DEFAULT_PRICES_DATE
+      };
+      changed = true;
+    }
+  });
+  if (changed) savePriceCache(cache);
+  return cache;
+}
+
 async function fetchSyncedPrices() {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
@@ -71,7 +92,9 @@ async function updateAllPrices(onProgress) {
       okCount++;
     } else {
       const existing = cache[ingredient.id];
-      if (existing && existing.source === "manual") {
+      if (existing && (existing.source === "manual" || existing.source === "default")) {
+        // Richtwerte und manuelle Preise bleiben stehen, bis echte Live-Daten
+        // gefunden werden - sie werden nicht durch "nicht gefunden" ersetzt.
         entry = existing;
       } else {
         entry = {

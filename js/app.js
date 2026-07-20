@@ -84,14 +84,28 @@ function renderPriceCell(ingredient, entry) {
     priceTd.textContent = `${formatEUR(value)} ${suffix}`;
 
     const badge = document.createElement("span");
-    badge.className = entry.source === "manual" ? "badge badge-manual" : "badge badge-ok";
-    badge.textContent = entry.source === "manual" ? t("ingredients.manual") : t("ingredients.offSource");
+    if (entry.source === "manual") {
+      badge.className = "badge badge-manual";
+      badge.textContent = t("ingredients.manual");
+    } else if (entry.source === "default") {
+      badge.className = "badge badge-default";
+      badge.textContent = t("ingredients.defaultSource");
+    } else {
+      badge.className = "badge badge-ok";
+      badge.textContent = t("ingredients.offSource");
+    }
     sourceTd.appendChild(badge);
 
     if (entry.source === "off" && entry.sampleCount) {
       const small = document.createElement("small");
       small.className = "sample-count";
       small.textContent = ` (${entry.sampleCount} ${t("ingredients.samples")})`;
+      sourceTd.appendChild(small);
+    } else if (entry.source === "default") {
+      const small = document.createElement("small");
+      small.className = "sample-count";
+      const dateStr = new Date(entry.fetchedAt).toLocaleDateString(getLang() === "uk" ? "uk-UA" : "de-DE");
+      small.textContent = ` (${dateStr})`;
       sourceTd.appendChild(small);
     }
   } else {
@@ -325,6 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
   wireRecipeForm();
   document.getElementById("update-prices-btn").addEventListener("click", handleUpdatePrices);
 
+  ensureDefaultPrices();
   renderIngredientsTable();
   renderLastUpdated();
   renderRecipeList();

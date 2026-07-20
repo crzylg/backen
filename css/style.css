@@ -196,6 +196,7 @@ th { background: rgba(200, 85, 122, 0.08); color: var(--color-primary-dark); }
 
 .badge-ok { background: rgba(47, 143, 91, 0.15); color: var(--color-ok); }
 .badge-manual { background: rgba(184, 134, 11, 0.15); color: var(--color-partial); }
+.badge-default { background: rgba(122, 106, 106, 0.15); color: var(--color-muted); }
 
 .sample-count { color: var(--color-muted); }
 
