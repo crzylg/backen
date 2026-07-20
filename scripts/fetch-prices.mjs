@@ -103,7 +103,43 @@ async function fetchIngredientPrice(ingredient) {
   }
 }
 
+async function debugQuery(label, params) {
+  try {
+    const res = await fetch(`${OFF_PRICES_ENDPOINT}?${params.toString()}`, {
+      headers: { Accept: "application/json", "User-Agent": "Konditor-Rechner/1.0 (debug)" }
+    });
+    const text = await res.text();
+    let count = "?";
+    let names = [];
+    try {
+      const json = JSON.parse(text);
+      const items = json.items || json.results || [];
+      count = Array.isArray(items) ? items.length : `total=${json.total ?? "?"}`;
+      names = items.slice(0, 5).map((it) => it.product && it.product.product_name);
+    } catch (e) {
+      count = `parse-error: ${text.slice(0, 150)}`;
+    }
+    console.log(`[DEBUG] ${label} -> HTTP ${res.status}, items=${JSON.stringify(count)}, names=${JSON.stringify(names)}`);
+  } catch (err) {
+    console.log(`[DEBUG] ${label} -> ERROR ${err && err.message}`);
+  }
+}
+
+async function runDebugQueries() {
+  await debugQuery("control: nonsense term", new URLSearchParams({ product_name__like: "xyzNichtExistiert123", size: "5" }));
+  await debugQuery("product__product_name__like=Mehl", new URLSearchParams({ product__product_name__like: "Mehl", size: "5" }));
+  await debugQuery("product__product_name__ilike=Mehl", new URLSearchParams({ product__product_name__ilike: "Mehl", size: "5" }));
+  await debugQuery("product_name__ilike=Mehl", new URLSearchParams({ product_name__ilike: "Mehl", size: "5" }));
+  await debugQuery("product__product_name=Mehl exact", new URLSearchParams({ product__product_name: "Mehl", size: "5" }));
+  await debugQuery("search=Mehl", new URLSearchParams({ search: "Mehl", size: "5" }));
+  await debugQuery("no filter baseline", new URLSearchParams({ size: "5" }));
+}
+
 async function main() {
+  if (process.env.DEBUG_PRICES === "1") {
+    await runDebugQueries();
+    return;
+  }
   const prices = {};
   let okCount = 0;
 
