@@ -65,11 +65,14 @@ async function fetchIngredientPrice(ingredient) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
-    // product_name erfordert exakte Übereinstimmung; product_name__like erlaubt
-    // eine Teilstring-Suche und ist der einzige Weg, generische Zutatennamen
-    // (z. B. "Mehl") gegen volle Produktbezeichnungen zu matchen.
+    // Mehrere Debug-Läufe haben gezeigt: product_name / product_name__like /
+    // product__product_name__(i)like / search werden von dieser API-Version
+    // still ignoriert (identische Ergebnisse auch mit einem Unsinnsbegriff als
+    // Kontrolle). category_tag ist dagegen ein echter Filter (liefert 0 Treffer
+    // bei einem Unsinns-Tag, während er bei einer bestehenden Kategorie
+    // greift) und wird deshalb für die Suche verwendet.
     const params = new URLSearchParams({
-      product_name__like: ingredient.searchTerm,
+      category_tag: `en:${ingredient.offCategory}`,
       location_country_code: "DE",
       order_by: "-created",
       size: "30"
@@ -103,43 +106,7 @@ async function fetchIngredientPrice(ingredient) {
   }
 }
 
-async function debugQuery(label, params) {
-  try {
-    const res = await fetch(`${OFF_PRICES_ENDPOINT}?${params.toString()}`, {
-      headers: { Accept: "application/json", "User-Agent": "Konditor-Rechner/1.0 (debug)" }
-    });
-    const text = await res.text();
-    let count = "?";
-    let names = [];
-    try {
-      const json = JSON.parse(text);
-      const items = json.items || json.results || [];
-      count = Array.isArray(items) ? items.length : `total=${json.total ?? "?"}`;
-      names = items.slice(0, 5).map((it) => it.product && it.product.product_name);
-    } catch (e) {
-      count = `parse-error: ${text.slice(0, 150)}`;
-    }
-    console.log(`[DEBUG] ${label} -> HTTP ${res.status}, items=${JSON.stringify(count)}, names=${JSON.stringify(names)}`);
-  } catch (err) {
-    console.log(`[DEBUG] ${label} -> ERROR ${err && err.message}`);
-  }
-}
-
-async function runDebugQueries() {
-  await debugQuery("no filter baseline", new URLSearchParams({ size: "5" }));
-  await debugQuery("category_tag=en:flours", new URLSearchParams({ category_tag: "en:flours", size: "5" }));
-  await debugQuery("category_tag=flours", new URLSearchParams({ category_tag: "flours", size: "5" }));
-  await debugQuery("category_tag=en:flours + DE", new URLSearchParams({ category_tag: "en:flours", location_country_code: "DE", size: "5" }));
-  await debugQuery("categories_tags=en:flours", new URLSearchParams({ categories_tags: "en:flours", size: "5" }));
-  await debugQuery("category_tag=en:sugars", new URLSearchParams({ category_tag: "en:sugars", size: "5" }));
-  await debugQuery("category_tag=xyz-nonsense", new URLSearchParams({ category_tag: "xyz-nonsense-category", size: "5" }));
-}
-
 async function main() {
-  if (process.env.DEBUG_PRICES === "1") {
-    await runDebugQueries();
-    return;
-  }
   const prices = {};
   let okCount = 0;
 
