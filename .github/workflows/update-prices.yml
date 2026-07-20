@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: '0 3 * * *'
   workflow_dispatch:
-    inputs:
-      debug_prices:
-        description: 'Only run diagnostic queries against the Open Prices API (no commit)'
-        type: boolean
-        default: false
   push:
     branches: [ "claude/pastaci-fiyat-hesaplayici-dwpa3v" ]
     paths:
@@ -32,8 +27,6 @@ jobs:
 
       - name: Fetch Germany prices from Open Food Facts
         run: node scripts/fetch-prices.mjs
-        env:
-          DEBUG_PRICES: ${{ github.event.inputs.debug_prices == 'true' && '1' || '0' }}
 
       - name: Commit and push if changed
         run: |
