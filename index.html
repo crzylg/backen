@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Konditor-Rechner / Калькулятор кондитера</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="title-block">
+        <h1 data-i18n="app.title">Konditor-Rechner</h1>
+        <p class="subtitle" data-i18n="app.subtitle">Zutatenkosten für Kuchen & Torten berechnen</p>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Sprache / Мова">
+        <button type="button" class="lang-btn" data-lang="de" data-i18n="lang.de">DE</button>
+        <button type="button" class="lang-btn" data-lang="uk" data-i18n="lang.uk">UA</button>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button type="button" class="tab-btn active" data-tab="ingredients" data-i18n="nav.ingredients">Zutaten</button>
+      <button type="button" class="tab-btn" data-tab="recipes" data-i18n="nav.recipes">Rezepte</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="tab-ingredients" class="tab-panel active">
+      <h2 data-i18n="ingredients.heading">Zutaten & Mengen</h2>
+      <p class="intro" data-i18n="ingredients.intro">Menge eintragen — die Kosten werden automatisch berechnet.</p>
+
+      <div class="update-bar">
+        <button id="update-prices-btn" type="button" class="primary-btn" data-i18n="ingredients.updateButton">Preise aktualisieren</button>
+        <span id="last-updated" class="last-updated"></span>
+      </div>
+      <div id="update-status" class="update-status" role="status" aria-live="polite"></div>
+
+      <div class="table-wrap">
+        <table id="ingredients-table">
+          <thead>
+            <tr>
+              <th data-i18n="ingredients.table.name">Zutat</th>
+              <th data-i18n="ingredients.table.quantity">Menge</th>
+              <th data-i18n="ingredients.table.pricePerUnit">Preis/Einheit</th>
+              <th data-i18n="ingredients.table.cost">Kosten</th>
+              <th data-i18n="ingredients.table.source">Quelle</th>
+            </tr>
+          </thead>
+          <tbody id="ingredients-tbody"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3"></td>
+              <td class="total-label" data-i18n="ingredients.total">Gesamtkosten</td>
+              <td id="total-cost" class="total-value">0,00 €</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <p class="disclaimer" data-i18n="ingredients.disclaimer">Preisquelle: Open Food Facts – Open Prices.</p>
+    </section>
+
+    <section id="tab-recipes" class="tab-panel">
+      <h2 data-i18n="recipes.heading">Rezepte</h2>
+      <p class="intro" data-i18n="recipes.intro">Foto oder Datei eines Rezepts von deinem Handy hochladen und speichern.</p>
+
+      <form id="recipe-form" class="recipe-form">
+        <label class="field">
+          <span data-i18n="recipes.nameLabel">Rezeptname</span>
+          <input type="text" id="recipe-name" data-i18n-placeholder="recipes.nameSample" />
+        </label>
+        <label class="field">
+          <span data-i18n="recipes.notesLabel">Notizen (optional)</span>
+          <textarea id="recipe-notes" rows="3"></textarea>
+        </label>
+        <label class="field">
+          <span data-i18n="recipes.uploadLabel">Datei auswählen (Foto, PDF, …)</span>
+          <input type="file" id="recipe-file" accept="image/*,application/pdf,.doc,.docx,.txt" />
+        </label>
+        <button type="submit" class="primary-btn" data-i18n="recipes.saveButton">Rezept speichern</button>
+      </form>
+      <div id="recipe-status" class="update-status" role="status" aria-live="polite"></div>
+
+      <h3 data-i18n="recipes.savedHeading">Gespeicherte Rezepte</h3>
+      <ul id="recipe-list" class="recipe-list"></ul>
+      <p class="disclaimer" data-i18n="footer.storageNote">Rezepte werden nur lokal auf diesem Gerät gespeichert.</p>
+    </section>
+  </main>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/ingredients.js"></script>
+  <script src="js/priceApi.js"></script>
+  <script src="js/recipes.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

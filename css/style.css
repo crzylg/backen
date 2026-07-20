@@ -1,0 +1,291 @@
+:root {
+  --color-bg: #fdf6f0;
+  --color-surface: #ffffff;
+  --color-primary: #c8557a;
+  --color-primary-dark: #a53f61;
+  --color-text: #3a2b2b;
+  --color-muted: #7a6a6a;
+  --color-border: #e8d9d0;
+  --color-ok: #2f8f5b;
+  --color-partial: #b8860b;
+  --color-fail: #c0392b;
+  --radius: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1c1517;
+    --color-surface: #2a2022;
+    --color-text: #f2e9e6;
+    --color-muted: #b8a8a8;
+    --color-border: #4a3a3c;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.app-header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 900px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+.title-block h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--color-primary-dark);
+}
+
+.subtitle {
+  margin: 0.2rem 0 0.6rem;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.lang-switch {
+  display: flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.lang-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lang-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.tabs {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0.7rem 0.4rem;
+  font-size: 1rem;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  color: var(--color-primary-dark);
+  border-bottom-color: var(--color-primary);
+  font-weight: 600;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+h2 { color: var(--color-primary-dark); }
+
+.intro { color: var(--color-muted); margin-top: -0.5rem; }
+
+.update-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.primary-btn {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-btn:disabled { opacity: 0.6; cursor: progress; }
+.primary-btn:hover:not(:disabled) { background: var(--color-primary-dark); }
+
+.last-updated { color: var(--color-muted); font-size: 0.85rem; }
+
+.update-status {
+  min-height: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.status-ok { color: var(--color-ok); }
+.status-partial { color: var(--color-partial); }
+.status-fail { color: var(--color-fail); }
+
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-width: 560px;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.92rem;
+}
+
+th { background: rgba(200, 85, 122, 0.08); color: var(--color-primary-dark); }
+
+.qty-input {
+  width: 5.5rem;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.unit-label { margin-left: 0.4rem; color: var(--color-muted); }
+
+.not-found { color: var(--color-fail); font-style: italic; }
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-ok { background: rgba(47, 143, 91, 0.15); color: var(--color-ok); }
+.badge-manual { background: rgba(184, 134, 11, 0.15); color: var(--color-partial); }
+
+.sample-count { color: var(--color-muted); }
+
+.manual-link {
+  display: block;
+  margin-top: 0.2rem;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  text-decoration: underline;
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.total-label { text-align: right; font-weight: 700; }
+.total-value { font-weight: 700; color: var(--color-primary-dark); }
+
+.disclaimer {
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  margin-top: 1rem;
+  line-height: 1.4;
+}
+
+.recipe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background: var(--color-surface);
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  max-width: 480px;
+}
+
+.field { display: flex; flex-direction: column; gap: 0.3rem; font-weight: 600; font-size: 0.9rem; }
+
+.field input[type="text"],
+.field textarea,
+.field input[type="file"] {
+  font-weight: normal;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: inherit;
+}
+
+.recipe-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.recipe-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.recipe-meta { color: var(--color-muted); font-size: 0.8rem; }
+.recipe-notes { margin: 0.3rem 0; white-space: pre-wrap; }
+.recipe-file-link { color: var(--color-primary); font-size: 0.85rem; }
+
+.delete-btn {
+  background: none;
+  border: 1px solid var(--color-fail);
+  color: var(--color-fail);
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  height: fit-content;
+}
+
+.recipe-empty { color: var(--color-muted); font-style: italic; }
+
+@media (max-width: 600px) {
+  .header-inner { flex-direction: row; align-items: center; }
+  .title-block h1 { font-size: 1.15rem; }
+  th, td { font-size: 0.82rem; padding: 0.45rem; }
+  .recipe-form { max-width: 100%; }
+}
