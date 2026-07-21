@@ -15,6 +15,8 @@ die Antwort an den Browser zurückgibt. Er speichert und verändert nichts.
 
 ## Einmalige Einrichtung (kostenlos, ca. 5 Minuten)
 
+### Option A: Code manuell einfügen
+
 1. Kostenloses Konto anlegen: https://dash.cloudflare.com/sign-up
 2. Im Dashboard: **Workers & Pages** → **Create** → **Create Worker**
 3. Einen Namen vergeben (z. B. `konditor-proxy`) und **Deploy** klicken
@@ -25,6 +27,24 @@ die Antwort an den Browser zurückgibt. Er speichert und verändert nichts.
    `https://konditor-proxy.<dein-name>.workers.dev`
 6. Diese URL in der App unter **Zutaten → Einstellungen → Proxy-URL**
    einfügen und speichern — fertig.
+
+### Option B: Direkt mit GitHub verbinden ("Connect to Git")
+
+Cloudflare kann den Worker automatisch aus diesem Repository bauen und bei
+jedem Push neu deployen. Dafür liegt im Repo-Root eine `wrangler.toml`
+(zeigt auf `cloudflare-worker/worker.js`) — sie wird von Cloudflare
+automatisch erkannt.
+
+1. Im Dashboard: **Workers & Pages** → **Create** → **Connect to Git**
+2. Das Repository `crzylg/backen` auswählen
+3. Bei den Build-Einstellungen das Root-Verzeichnis auf `/` (Repo-Root)
+   lassen — die `wrangler.toml` dort verweist selbst in den
+   `cloudflare-worker`-Unterordner
+4. Deployen lassen; nach erfolgreichem Build erscheint die Worker-URL im
+   Dashboard (z. B. unter dem Worker-Namen oder unter
+   **Settings → Domains & Routes**)
+5. Diese URL in der App unter **Zutaten → Einstellungen → Proxy-URL**
+   einfügen und speichern
 
 ## Sicherheit
 
