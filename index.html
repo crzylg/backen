@@ -12,7 +12,7 @@
     <div class="header-inner">
       <div class="title-block">
         <h1 data-i18n="app.title">Konditor-Rechner</h1>
-        <p class="subtitle" data-i18n="app.subtitle">Zutatenkosten für Kuchen & Torten berechnen</p>
+        <p class="subtitle" data-i18n="app.subtitle">Berechne die Kosten für Kuchen und Torten</p>
       </div>
       <div class="lang-switch" role="group" aria-label="Sprache / Мова">
         <button type="button" class="lang-btn" data-lang="de" data-i18n="lang.de">DE</button>
@@ -27,8 +27,8 @@
 
   <main>
     <section id="tab-ingredients" class="tab-panel active">
-      <h2 data-i18n="ingredients.heading">Zutaten & Mengen</h2>
-      <p class="intro" data-i18n="ingredients.intro">Menge eintragen — die Kosten werden automatisch berechnet.</p>
+      <h2 data-i18n="ingredients.heading">Zutaten und Mengen</h2>
+      <p class="intro" data-i18n="ingredients.intro">Trage die Menge ein. Die App rechnet die Kosten für dich aus.</p>
 
       <div class="update-bar">
         <button id="update-prices-btn" type="button" class="primary-btn" data-i18n="ingredients.updateButton">Preise aktualisieren</button>
@@ -43,9 +43,9 @@
       </form>
 
       <details class="settings-box">
-        <summary data-i18n="settings.title">Einstellungen: Live-Preissuche für eigene Zutaten</summary>
+        <summary data-i18n="settings.title">Einstellungen für eigene Zutaten</summary>
         <p class="settings-help" data-i18n="settings.proxyHelp">
-          Optional: Proxy-URL eintragen, damit "Preis suchen" bei selbst hinzugefügten Zutaten funktioniert.
+          Das ist nicht Pflicht. Trage hier eine Adresse ein. Dann funktioniert die Preis-Suche für neue Zutaten.
         </p>
         <div class="settings-row">
           <input type="text" id="proxy-url-input" data-i18n-placeholder="settings.proxyPlaceholder" />
@@ -60,36 +60,36 @@
             <tr>
               <th data-i18n="ingredients.table.name">Zutat</th>
               <th data-i18n="ingredients.table.quantity">Menge</th>
-              <th data-i18n="ingredients.table.pricePerUnit">Preis/Einheit</th>
+              <th data-i18n="ingredients.table.pricePerUnit">Preis</th>
               <th data-i18n="ingredients.table.cost">Kosten</th>
-              <th data-i18n="ingredients.table.source">Quelle</th>
+              <th data-i18n="ingredients.table.source">Woher?</th>
             </tr>
           </thead>
           <tbody id="ingredients-tbody"></tbody>
           <tfoot>
             <tr>
               <td colspan="3"></td>
-              <td class="total-label" data-i18n="ingredients.total">Gesamtkosten</td>
+              <td class="total-label" data-i18n="ingredients.total">Summe</td>
               <td id="total-cost" class="total-value">0,00 €</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
-      <p class="disclaimer" data-i18n="ingredients.disclaimer">Preisquelle: Open Food Facts – Open Prices.</p>
+      <p class="disclaimer" data-i18n="ingredients.disclaimer">Die Preise kommen von Open Food Facts.</p>
     </section>
 
     <section id="tab-recipes" class="tab-panel">
       <h2 data-i18n="recipes.heading">Rezepte</h2>
-      <p class="intro" data-i18n="recipes.intro">Foto oder Datei eines Rezepts von deinem Handy hochladen und speichern.</p>
+      <p class="intro" data-i18n="recipes.intro">Lade ein Foto oder eine Datei von deinem Handy hoch. Speichere dein Rezept.</p>
 
       <form id="recipe-form" class="recipe-form">
         <label class="field">
-          <span data-i18n="recipes.nameLabel">Rezeptname</span>
+          <span data-i18n="recipes.nameLabel">Name vom Rezept</span>
           <input type="text" id="recipe-name" data-i18n-placeholder="recipes.nameSample" />
         </label>
         <label class="field">
-          <span data-i18n="recipes.notesLabel">Notizen (optional)</span>
+          <span data-i18n="recipes.notesLabel">Notizen (nicht Pflicht)</span>
           <textarea id="recipe-notes" rows="3"></textarea>
         </label>
         <label class="field">
@@ -100,9 +100,9 @@
       </form>
       <div id="recipe-status" class="update-status" role="status" aria-live="polite"></div>
 
-      <h3 data-i18n="recipes.savedHeading">Gespeicherte Rezepte</h3>
+      <h3 data-i18n="recipes.savedHeading">Deine Rezepte</h3>
       <ul id="recipe-list" class="recipe-list"></ul>
-      <p class="disclaimer" data-i18n="footer.storageNote">Rezepte werden nur lokal auf diesem Gerät gespeichert.</p>
+      <p class="disclaimer" data-i18n="footer.storageNote">Deine Rezepte bleiben nur auf diesem Handy.</p>
     </section>
   </main>
 
