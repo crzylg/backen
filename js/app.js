@@ -153,6 +153,15 @@ function renderPriceCell(ingredient, entry) {
   manualBtn.addEventListener("click", () => promptManualPrice(ingredient));
   sourceTd.appendChild(manualBtn);
 
+  if (entry && entry.source === "manual") {
+    const deletePriceBtn = document.createElement("button");
+    deletePriceBtn.type = "button";
+    deletePriceBtn.className = "manual-link manual-link-delete";
+    deletePriceBtn.textContent = t("ingredients.deletePrice");
+    deletePriceBtn.addEventListener("click", () => handleDeletePrice(ingredient));
+    sourceTd.appendChild(deletePriceBtn);
+  }
+
   if (ingredient.custom) {
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
@@ -199,6 +208,18 @@ async function handleSearchPrice(ingredient, buttonEl) {
 
   buttonEl.disabled = false;
   buttonEl.textContent = originalText;
+}
+
+function handleDeletePrice(ingredient) {
+  const confirmed = window.confirm(`${ingredientName(ingredient)}: ${t("ingredients.confirmDeletePrice")}`);
+  if (!confirmed) return;
+
+  deletePrice(ingredient.id);
+  ensureDefaultPrices();
+  const cache = loadPriceCache();
+  renderPriceCell(ingredient, cache[ingredient.id]);
+  updateRowCost(ingredient.id);
+  updateTotal();
 }
 
 function promptManualPrice(ingredient) {

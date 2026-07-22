@@ -132,6 +132,16 @@ function setManualPrice(ingredientId, pricePerUnit) {
   return cache;
 }
 
+// Entfernt einen gespeicherten Preis komplett (z. B. einen manuell
+// eingetragenen). Ein eingebauter Richtwert wird danach automatisch wieder
+// angezeigt (ensureDefaultPrices füllt nur fehlende Einträge auf).
+function deletePrice(ingredientId) {
+  const cache = loadPriceCache();
+  delete cache[ingredientId];
+  savePriceCache(cache);
+  return cache;
+}
+
 // Ergebnis einer Live-Suche (liveSearch.js) für eine selbst hinzugefügte
 // Zutat im Cache ablegen. Wie "off", aber eigene Quelle fürs Badge.
 function setLivePrice(ingredientId, pricePerUnit, sampleCount) {
