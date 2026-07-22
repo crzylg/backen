@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-22T09:18:09.480Z",
+  "generatedAt": "2026-07-22T09:45:50.952Z",
   "country": "DE",
   "source": "Open Food Facts - Open Prices (https://prices.openfoodfacts.org)",
-  "okCount": 2,
+  "okCount": 3,
   "total": 33,
   "prices": {
     "flour": {
@@ -17,7 +17,9 @@
     "eggs": {
       "status": "ok",
       "pricePerUnit": 0.495,
-      "sampleCount": 4
+      "sampleCount": 4,
+      "categoryTag": "eggs",
+      "broad": false
     },
     "milk": {
       "status": "not_found"
@@ -52,7 +54,9 @@
     "lemon": {
       "status": "ok",
       "pricePerUnit": 0.99,
-      "sampleCount": 6
+      "sampleCount": 6,
+      "categoryTag": "lemons",
+      "broad": false
     },
     "couverture": {
       "status": "not_found"
@@ -88,7 +92,11 @@
       "status": "not_found"
     },
     "coconut_flakes": {
-      "status": "not_found"
+      "status": "ok",
+      "pricePerUnit": 0.00157,
+      "sampleCount": 2,
+      "categoryTag": "coconuts",
+      "broad": true
     },
     "cornstarch": {
       "status": "not_found"
