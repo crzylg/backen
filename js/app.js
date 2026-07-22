@@ -104,6 +104,13 @@ function renderPriceCell(ingredient, entry) {
       small.className = "sample-count";
       small.textContent = ` (${entry.sampleCount} ${t("ingredients.samples")})`;
       sourceTd.appendChild(small);
+
+      if (entry.broad) {
+        const broadNote = document.createElement("small");
+        broadNote.className = "sample-count broad-category-note";
+        broadNote.textContent = ` · ${t("ingredients.broadCategory")}`;
+        sourceTd.appendChild(broadNote);
+      }
     } else if (entry.source === "default") {
       const small = document.createElement("small");
       small.className = "sample-count";

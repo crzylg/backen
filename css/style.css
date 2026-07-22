@@ -187,6 +187,7 @@ th { background: rgba(200, 85, 122, 0.08); color: var(--color-primary-dark); }
 .not-found { color: var(--color-fail); font-style: italic; }
 .price-warning { color: var(--color-partial); font-weight: 700; }
 .price-warning-note { color: var(--color-partial); font-size: 0.78rem; font-weight: 600; margin-top: 0.2rem; }
+.broad-category-note { font-style: italic; }
 
 .badge {
   display: inline-block;

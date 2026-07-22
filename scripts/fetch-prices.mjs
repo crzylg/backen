@@ -65,18 +65,19 @@ function median(numbers) {
   return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
-async function fetchIngredientPrice(ingredient) {
+// Fragt eine einzelne Open-Prices-Kategorie ab. Mehrere Debug-Läufe haben
+// gezeigt: product_name / product_name__like / product__product_name__(i)like
+// / search werden von dieser API-Version still ignoriert (identische
+// Ergebnisse auch mit einem Unsinnsbegriff als Kontrolle). category_tag ist
+// dagegen ein echter Filter (liefert 0 Treffer bei einem Unsinns-Tag,
+// während er bei einer bestehenden Kategorie greift) und wird deshalb für
+// die Suche verwendet.
+async function queryCategory(categoryTag, baseUnit) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
-    // Mehrere Debug-Läufe haben gezeigt: product_name / product_name__like /
-    // product__product_name__(i)like / search werden von dieser API-Version
-    // still ignoriert (identische Ergebnisse auch mit einem Unsinnsbegriff als
-    // Kontrolle). category_tag ist dagegen ein echter Filter (liefert 0 Treffer
-    // bei einem Unsinns-Tag, während er bei einer bestehenden Kategorie
-    // greift) und wird deshalb für die Suche verwendet.
     const params = new URLSearchParams({
-      category_tag: `en:${ingredient.offCategory}`,
+      category_tag: `en:${categoryTag}`,
       location_country_code: "DE",
       order_by: "-created",
       size: "30"
@@ -98,7 +99,7 @@ async function fetchIngredientPrice(ingredient) {
       return { status: "not_found" };
     }
     const normalized = items
-      .map((item) => normalizePricePerBaseUnit(item, ingredient.baseUnit))
+      .map((item) => normalizePricePerBaseUnit(item, baseUnit))
       .filter((v) => v !== null && v > 0);
     if (normalized.length < MIN_SAMPLE_COUNT) {
       return { status: "not_found" };
@@ -108,6 +109,27 @@ async function fetchIngredientPrice(ingredient) {
     clearTimeout(timeout);
     return { status: "error", message: err && err.message };
   }
+}
+
+// Probiert erst die genaue Kategorie, dann - falls dort zu wenig Preise
+// vorliegen - der Reihe nach die breiteren Fallback-Kategorien aus
+// ingredients.js. Ein Treffer über eine Fallback-Kategorie wird als
+// "broad: true" markiert, damit die UI ihn klar von einem Treffer in der
+// genauen Kategorie unterscheiden kann.
+async function fetchIngredientPrice(ingredient) {
+  const chain = [ingredient.offCategory, ...(ingredient.offCategoryFallbacks || [])];
+  let lastResult = { status: "not_found" };
+
+  for (let i = 0; i < chain.length; i++) {
+    const result = await queryCategory(chain[i], ingredient.baseUnit);
+    if (result.status === "ok") {
+      return { ...result, categoryTag: chain[i], broad: i > 0 };
+    }
+    lastResult = result;
+    if (result.status === "error") break;
+    if (i < chain.length - 1) await sleep(DELAY_BETWEEN_REQUESTS_MS);
+  }
+  return lastResult;
 }
 
 async function main() {
@@ -120,10 +142,12 @@ async function main() {
       prices[ingredient.id] = {
         status: "ok",
         pricePerUnit: result.pricePerUnit,
-        sampleCount: result.sampleCount
+        sampleCount: result.sampleCount,
+        categoryTag: result.categoryTag,
+        broad: !!result.broad
       };
       okCount++;
-      console.log(`OK  ${ingredient.id}: ${result.pricePerUnit.toFixed(5)} EUR/${ingredient.baseUnit} (${result.sampleCount} Datenpunkte)`);
+      console.log(`OK  ${ingredient.id}: ${result.pricePerUnit.toFixed(5)} EUR/${ingredient.baseUnit} (${result.sampleCount} Datenpunkte, Kategorie: ${result.categoryTag}${result.broad ? ", weit" : ""})`);
     } else {
       prices[ingredient.id] = { status: result.status === "error" ? "error" : "not_found" };
       console.log(`--  ${ingredient.id}: ${result.status}${result.httpStatus ? " (HTTP " + result.httpStatus + ")" : ""}`);

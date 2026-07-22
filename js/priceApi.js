@@ -85,6 +85,8 @@ async function updateAllPrices(onProgress) {
         status: "ok",
         pricePerUnit: remoteEntry.pricePerUnit,
         sampleCount: remoteEntry.sampleCount,
+        categoryTag: remoteEntry.categoryTag,
+        broad: !!remoteEntry.broad,
         source: "off",
         fetchedAt: (remote && remote.generatedAt) || new Date().toISOString()
       };
