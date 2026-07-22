@@ -9,6 +9,10 @@
 // dieser Kategorie echte Preise aus Deutschland bei Open Prices ab.
 const PROXY_URL_KEY = "pastaci_proxy_url";
 const LIVE_SEARCH_TIMEOUT_MS = 12000;
+// Ein einzelner gemeldeter Preis kann ein Ausreißer oder Tippfehler sein
+// (Open Prices ist crowdsourced). Erst ab zwei unabhängigen Preisen zeigen
+// wir das Ergebnis als "gefunden" an.
+const MIN_SAMPLE_COUNT = 2;
 
 function getProxyUrl() {
   return (localStorage.getItem(PROXY_URL_KEY) || "").trim().replace(/\/+$/, "");
@@ -107,7 +111,7 @@ async function fetchPricesForCategory(proxy, categoryTag, baseUnit) {
   const normalized = items
     .map((item) => normalizeLivePrice(item, baseUnit))
     .filter((v) => v !== null && v > 0);
-  if (normalized.length === 0) return { status: "not_found" };
+  if (normalized.length < MIN_SAMPLE_COUNT) return { status: "not_found" };
   return { status: "ok", pricePerUnit: medianOf(normalized), sampleCount: normalized.length };
 }
 

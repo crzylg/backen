@@ -17,6 +17,10 @@ const OUTPUT_PATH = path.join(__dirname, "..", "data", "prices.json");
 const OFF_PRICES_ENDPOINT = "https://prices.openfoodfacts.org/api/v1/prices";
 const FETCH_TIMEOUT_MS = 15000;
 const DELAY_BETWEEN_REQUESTS_MS = 500;
+// Ein einzelner gemeldeter Preis kann ein Ausreißer oder Tippfehler sein
+// (Open Prices ist crowdsourced). Erst ab zwei unabhängigen Preisen zeigen
+// wir das Ergebnis als "gefunden" an.
+const MIN_SAMPLE_COUNT = 2;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -96,7 +100,7 @@ async function fetchIngredientPrice(ingredient) {
     const normalized = items
       .map((item) => normalizePricePerBaseUnit(item, ingredient.baseUnit))
       .filter((v) => v !== null && v > 0);
-    if (normalized.length === 0) {
+    if (normalized.length < MIN_SAMPLE_COUNT) {
       return { status: "not_found" };
     }
     return { status: "ok", pricePerUnit: median(normalized), sampleCount: normalized.length };

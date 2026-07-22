@@ -111,6 +111,22 @@ function renderPriceCell(ingredient, entry) {
       small.textContent = ` (${dateStr})`;
       sourceTd.appendChild(small);
     }
+
+    // Sicherheitsnetz: echte Preise (off/live) können auf einem einzelnen
+    // ungewöhnlichen Community-Eintrag beruhen. Weicht der Preis stark vom
+    // recherchierten Richtwert ab, warnen wir sichtbar statt ihn stillschweigend
+    // als sicher darzustellen - der Wert wird trotzdem angezeigt, nichts wird
+    // unterdrückt.
+    if ((entry.source === "off" || entry.source === "live") && typeof ingredient.defaultPricePerUnit === "number") {
+      const ratio = entry.pricePerUnit / ingredient.defaultPricePerUnit;
+      if (ratio > 4 || ratio < 0.25) {
+        priceTd.classList.add("price-warning");
+        const warn = document.createElement("div");
+        warn.className = "price-warning-note";
+        warn.textContent = `⚠️ ${t("ingredients.priceWarning")}`;
+        sourceTd.appendChild(warn);
+      }
+    }
   } else {
     priceTd.textContent = t("ingredients.notFound");
     priceTd.classList.add("not-found");
