@@ -1,120 +1,108 @@
 {
-  "generatedAt": "2026-07-24T05:53:08.004Z",
+  "generatedAt": "2026-07-25T05:53:33.616Z",
   "country": "DE",
   "source": "Open Food Facts - Open Prices (https://prices.openfoodfacts.org)",
-  "okCount": 3,
+  "okCount": 0,
   "total": 33,
   "prices": {
     "flour": {
-      "status": "not_found"
+      "status": "error"
     },
     "sugar": {
-      "status": "not_found"
+      "status": "error"
     },
     "butter": {
-      "status": "not_found"
+      "status": "error"
     },
     "eggs": {
-      "status": "ok",
-      "pricePerUnit": 0.495,
-      "sampleCount": 4,
-      "categoryTag": "eggs",
-      "broad": false
+      "status": "error"
     },
     "milk": {
-      "status": "not_found"
+      "status": "error"
     },
     "baking_powder": {
-      "status": "not_found"
+      "status": "error"
     },
     "vanilla_sugar": {
-      "status": "not_found"
+      "status": "error"
     },
     "salt": {
-      "status": "not_found"
+      "status": "error"
     },
     "cocoa": {
-      "status": "not_found"
+      "status": "error"
     },
     "chocolate": {
-      "status": "not_found"
+      "status": "error"
     },
     "cream": {
-      "status": "not_found"
+      "status": "error"
     },
     "cream_cheese": {
-      "status": "not_found"
+      "status": "error"
     },
     "powdered_sugar": {
-      "status": "not_found"
+      "status": "error"
     },
     "oil": {
-      "status": "not_found"
+      "status": "error"
     },
     "lemon": {
-      "status": "ok",
-      "pricePerUnit": 0.99,
-      "sampleCount": 6,
-      "categoryTag": "lemons",
-      "broad": false
+      "status": "error"
     },
     "couverture": {
-      "status": "not_found"
+      "status": "error"
     },
     "gelatine": {
-      "status": "not_found"
+      "status": "error"
     },
     "cream_stiffener": {
-      "status": "not_found"
+      "status": "error"
     },
     "fresh_yeast": {
-      "status": "not_found"
+      "status": "error"
     },
     "dry_yeast": {
-      "status": "not_found"
+      "status": "error"
     },
     "baking_soda": {
-      "status": "not_found"
+      "status": "error"
     },
     "cinnamon": {
-      "status": "not_found"
+      "status": "error"
     },
     "vanilla_extract": {
-      "status": "not_found"
+      "status": "error"
     },
     "ground_almonds": {
-      "status": "not_found"
+      "status": "error"
     },
     "honey": {
-      "status": "not_found"
+      "status": "error"
     },
     "raisins": {
-      "status": "not_found"
+      "status": "error"
     },
     "coconut_flakes": {
-      "status": "ok",
-      "pricePerUnit": 0.00157,
-      "sampleCount": 2,
-      "categoryTag": "coconuts",
-      "broad": true
+      "status": "error"
     },
     "cornstarch": {
-      "status": "not_found"
+      "status": "error"
     },
     "buttermilk": {
-      "status": "not_found"
+      "status": "error"
     },
     "yogurt": {
-      "status": "not_found"
+      "status": "error"
     },
     "quark": {
-      "status": "not_found"
+      "status": "error"
     },
     "mascarpone": {
-      "status": "not_found"
+      "status": "error"
     },
     "marzipan": {
-      "status": "not_found"
+      "status": "error"
     }
   }
 }
