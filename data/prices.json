@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-31T09:28:45.345Z",
+  "generatedAt": "2026-09-01T08:25:48.407Z",
   "country": "DE",
   "source": "Open Food Facts - Open Prices (https://prices.openfoodfacts.org)",
   "okCount": 3,
@@ -53,8 +53,8 @@
     },
     "lemon": {
       "status": "ok",
-      "pricePerUnit": 0.79,
-      "sampleCount": 11,
+      "pricePerUnit": 0.74,
+      "sampleCount": 10,
       "categoryTag": "lemons",
       "broad": false
     },
