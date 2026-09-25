@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T08:15:12.890Z",
+  "generatedAt": "2026-09-25T08:37:53.386Z",
   "country": "DE",
   "source": "Open Food Facts - Open Prices (https://prices.openfoodfacts.org)",
   "okCount": 3,
@@ -16,8 +16,8 @@
     },
     "eggs": {
       "status": "ok",
-      "pricePerUnit": 0.495,
-      "sampleCount": 6,
+      "pricePerUnit": 0.49,
+      "sampleCount": 7,
       "categoryTag": "eggs",
       "broad": false
     },
