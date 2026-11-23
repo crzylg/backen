@@ -1,33 +1,37 @@
 {
-  "generatedAt": "2026-11-22T10:54:46.154Z",
+  "generatedAt": "2026-11-23T11:58:27.947Z",
   "country": "DE",
   "source": "Open Food Facts - Open Prices (https://prices.openfoodfacts.org)",
-  "okCount": 2,
+  "okCount": 3,
   "total": 33,
   "prices": {
     "flour": {
-      "status": "error"
+      "status": "not_found"
     },
     "sugar": {
-      "status": "error"
+      "status": "not_found"
     },
     "butter": {
-      "status": "error"
+      "status": "not_found"
     },
     "eggs": {
-      "status": "error"
+      "status": "ok",
+      "pricePerUnit": 0.48,
+      "sampleCount": 8,
+      "categoryTag": "eggs",
+      "broad": false
     },
     "milk": {
-      "status": "error"
+      "status": "not_found"
     },
     "baking_powder": {
-      "status": "error"
+      "status": "not_found"
     },
     "vanilla_sugar": {
-      "status": "error"
+      "status": "not_found"
     },
     "salt": {
-      "status": "error"
+      "status": "not_found"
     },
     "cocoa": {
       "status": "not_found"
