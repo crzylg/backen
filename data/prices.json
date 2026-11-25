@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-24T13:32:25.609Z",
+  "generatedAt": "2026-11-25T12:22:59.292Z",
   "country": "DE",
   "source": "Open Food Facts - Open Prices (https://prices.openfoodfacts.org)",
-  "okCount": 0,
+  "okCount": 1,
   "total": 33,
   "prices": {
     "flour": {
@@ -69,40 +69,44 @@
       "status": "error"
     },
     "cinnamon": {
-      "status": "error"
+      "status": "not_found"
     },
     "vanilla_extract": {
-      "status": "error"
+      "status": "not_found"
     },
     "ground_almonds": {
-      "status": "error"
+      "status": "not_found"
     },
     "honey": {
-      "status": "error"
+      "status": "not_found"
     },
     "raisins": {
-      "status": "error"
+      "status": "not_found"
     },
     "coconut_flakes": {
-      "status": "error"
+      "status": "ok",
+      "pricePerUnit": 0.00157,
+      "sampleCount": 2,
+      "categoryTag": "coconuts",
+      "broad": true
     },
     "cornstarch": {
-      "status": "error"
+      "status": "not_found"
     },
     "buttermilk": {
-      "status": "error"
+      "status": "not_found"
     },
     "yogurt": {
-      "status": "error"
+      "status": "not_found"
     },
     "quark": {
-      "status": "error"
+      "status": "not_found"
     },
     "mascarpone": {
-      "status": "error"
+      "status": "not_found"
     },
     "marzipan": {
-      "status": "error"
+      "status": "not_found"
     }
   }
 }
